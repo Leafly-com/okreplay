@@ -1,4 +1,5 @@
 subprojects {
+  apply plugin: "maven-publish"
   apply from: "../gradle/dependencies.gradle"
 
   buildscript {
@@ -19,14 +20,14 @@ subprojects {
       classpath dep.okreplayPlugin
       classpath dep.gradleMavenPublishPlugin
     }
-  }
 
-  allprojects {
-    repositories {
-      jcenter()
-      maven { url 'https://maven.google.com' }
-      if (System.getenv("INTERNAL_MAVEN_URL")) {
-        maven { url INTERNAL_MAVEN_URL }
+    allprojects {
+      repositories {
+        jcenter()
+        maven { url 'https://maven.google.com' }
+        if (System.getenv("INTERNAL_MAVEN_URL")) {
+          maven { url INTERNAL_MAVEN_URL }
+        }
       }
     }
   }

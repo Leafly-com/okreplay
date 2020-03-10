@@ -1,28 +1,27 @@
 package okreplay
 
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okreplay.Util.CONTENT_TYPE
-import okreplay.Util.isNullOrEmpty
 import java.nio.charset.Charset
 
 internal abstract class AbstractMessage : Message {
 
   override fun getContentType(): String {
     val header = header(CONTENT_TYPE)
-    return if (isNullOrEmpty(header)) {
+    return if (header.isNullOrEmpty()) {
       DEFAULT_CONTENT_TYPE
     } else {
-      MediaType.parse(header!!)!!.toString()
+      header.toMediaTypeOrNull().toString()
     }
   }
 
   override fun getCharset(): Charset {
     val header = header(CONTENT_TYPE)
-    return if (isNullOrEmpty(header)) {
+    return if (header.isNullOrEmpty()) {
       // TODO: this isn't valid for non-text data – this method should return String?
       UTF_8
     } else {
-      MediaType.parse(header!!)!!.charset() ?: UTF_8
+      header.toMediaTypeOrNull()?.charset() ?: UTF_8
     }
   }
 

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.vanniktech.maven.publish'
+apply plugin: "maven-publish"
 
 android {
   compileSdkVersion androidConfig.compileSdkVersion
@@ -31,4 +32,22 @@ dependencies {
   testImplementation dep.robolectric
   testImplementation dep.truth
   testImplementation dep.mockito
+}
+
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = uri("https://maven.pkg.github.com/Leafly-com/okreplay")
+      credentials {
+        username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+        password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+      }
+    }
+  }
+  publications {
+    gpr(MavenPublication) {
+      artifact("$buildDir/outputs/aar/okreplay-espresso-release.aar")
+    }
+  }
 }
